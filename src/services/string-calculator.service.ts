@@ -28,7 +28,7 @@ export class StringCalculatorService {
   calculateSum(input: string): string {
     if (input === '') return '';
     const someText1 = input.replace(/(\r\\n|\\n|\r)/g, 'MM');
-    const regex = /\\MM/g;
+    const regex = /\\MM|\/\/MM|[;]/g;
     const pp = someText1.replace(regex, ',');
     return pp;
   }
