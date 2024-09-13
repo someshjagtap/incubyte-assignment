@@ -4,26 +4,32 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class StringCalculatorService {
-  add(numbers: string): number {
-    if (!numbers) {
-      return 0;
-    }
+  constructor() {}
 
-    let delimiter = ',';
+  add(value: string): number {
+    const cleanedValue = this.calculateSum(value).replace('"', '');
+    const filtvalue = cleanedValue.trim();
+    if (!cleanedValue) return 0;
 
-    if (numbers.startsWith('//')) {
-      delimiter = numbers[2];
-      numbers = numbers.slice(4);
-    }
+    const numberArray = filtvalue
+      .split(',')
+      .filter((num) => num.trim() !== '')
+      .map((num) => {
+        const number = parseInt(num);
+        return number;
+      });
 
-    numbers = numbers.replace(/\n/g, delimiter);
-    const numList = numbers.split(delimiter).map(Number);
+    const sum = numberArray
+      .filter((num) => !isNaN(num))
+      .reduce((a, b) => a + b, 0);
+    return sum;
+  }
 
-    const negatives = numList.filter((num) => num < 0);
-    if (negatives.length) {
-      throw new Error(`negative numbers not allowed: ${negatives.join(',')}`);
-    }
-
-    return numList.reduce((acc, curr) => acc + curr, 0);
+  calculateSum(input: string): string {
+    if (input === '') return '';
+    const someText1 = input.replace(/(\r\\n|\\n|\r)/g, 'MM');
+    const regex = /\\MM/g;
+    const pp = someText1.replace(regex, ',');
+    return pp;
   }
 }
